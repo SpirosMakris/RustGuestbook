@@ -6,8 +6,9 @@ edition = "2018"
 
 [dependencies]
 rocket = "0.4.0"
+chrono = "*"
 
 [dependencies.rocket_contrib]
 version = "*"
 default-features = false
-features = ["handlebars_templates"]
+features = ["handlebars_templates", "sqlite_pool"]
