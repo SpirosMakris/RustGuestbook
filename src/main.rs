@@ -14,9 +14,17 @@ fn index() -> Template {
     Template::render("index", context)
 }
 
+#[get("/topic_form")]
+fn topic_form() -> Template {
+    let mut context = HashMap::new();
+    context.insert("title", "Rust GuestBook - topic entry");
+    Template::render("topic_form", context)
+}
+
 fn main() {
     rocket::ignite()
         .mount("/", routes![index])
+        .mount("/", routes![topic_form])
         .attach(Template::fairing())
         .launch();
 }

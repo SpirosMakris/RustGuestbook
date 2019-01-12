@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ruset Guestbook</title>
+</head>
+  <body>
+      <div class="entry">
+        <h1>{{title}}</h1>
+        <div class="body">
+          <form method="post">
+            <div>
+              <label for="name">Name: </label>
+              <input type="text" name="name">
+            </div>
+            <div>
+              <label for="title">Title: </label>
+              <input type="text" name="title">
+            </div>
+            <div>
+              <label for="content">Content: </label>
+            </div>
+            <div>
+            <textarea name="content" cols="50" rows="8"></textarea>
+            </div>
+            <div>
+              <input type="submit" value="Submit">
+            </div>
+          </form>
+        </div>
+      </div>
+  </body>
+</html>
