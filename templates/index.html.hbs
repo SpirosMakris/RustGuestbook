@@ -10,7 +10,18 @@
     <div class="entry">
       <h1>{{title}}</h1>
       <div class="body">
-        {{body}}
+          {{index_content}}
+          <hr>
+          <div class="posts">
+            {{#each posts}}
+              <div class="post">
+                <div class="name">Name:{{this.name}} </div>
+                <div class="title">Title: {{this.title}} </div>
+                <div class="content">Content: {{this.content}} </div>
+                <hr>
+              </div>
+            {{/each}}
+          </div>
       </div>
     </div>
   </body>
