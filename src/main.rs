@@ -24,7 +24,7 @@ struct Post {
 #[derive(Serialize)]
 struct TemplateContext {
     title: &'static str,
-    index_content: Option<String>,
+    announcement: Option<String>,
     posts: Vec<Post>,
 }
 
@@ -48,7 +48,7 @@ fn index(conn: GuestbookDbConn) -> Template {
 
     let context = TemplateContext {
         title: "Rust Guestbook!",
-        index_content: Some("Welcome to my guestbook".to_string()),
+        announcement: Some("Welcome to my guestbook".to_string()),
         posts: post_iter.map(
             |post| post.unwrap()
         ).collect(),

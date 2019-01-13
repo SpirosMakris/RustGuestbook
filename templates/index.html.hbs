@@ -10,7 +10,12 @@
     <div class="entry">
       <h1>{{title}}</h1>
       <div class="body">
-          {{index_content}}
+          <div class="announcement">
+            {{announcement}}
+          </div>
+          <nav class="nav">
+            <a href="topic_form">Add post</a>
+          </nav>
           <hr>
           <div class="posts">
             {{#each posts}}
