@@ -10,7 +10,7 @@
       <div class="entry">
         <h1>{{title}}</h1>
         <div class="body">
-          <form method="post" action="/topic">
+          <form method="post" action="/post">
             <div>
               <label for="name">Name: </label>
               <input type="text" name="name">
@@ -23,8 +23,13 @@
               <label for="content">Content: </label>
             </div>
             <div>
-            <textarea name="content" cols="50" rows="8"></textarea>
+              <textarea name="content" cols="50" rows="8"></textarea>
             </div>
+            {{#if id}}
+              <div>
+                <input type="hidden" name="id" value="{{id}}"/>
+              </div>
+            {{/if}}
             <div>
               <input type="submit" value="Submit">
             </div>
