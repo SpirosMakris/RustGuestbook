@@ -14,4 +14,4 @@ serde_json = "*"
 [dependencies.rocket_contrib]
 version = "*"
 default-features = false
-features = ["handlebars_templates", "sqlite_pool"]
+features = ["handlebars_templates", "sqlite_pool", "json"]

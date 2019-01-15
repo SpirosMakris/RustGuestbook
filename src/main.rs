@@ -14,6 +14,7 @@ extern crate serde;
 
 use std::collections::HashMap;
 use rocket_contrib::templates::Template;
+use rocket_contrib::json::{Json, JsonValue};
 use chrono::Utc;
 
 use rocket_contrib::databases::rusqlite;
@@ -41,7 +42,6 @@ use rocket::response::Redirect;
 
 #[get("/")]
 fn index(conn: GuestbookDbConn) -> Template {
-    
   // Make an sql statement and apply a closure to executed result -> iterator
     let mut stmt = conn.prepare("SELECT id, reply_id, name, title, content FROM post").unwrap();
     let post_iter = stmt.query_map(&[],
@@ -95,11 +95,47 @@ fn create_topic(conn: GuestbookDbConn, post: Form<Post>) -> Redirect {
     Redirect::to("/")
 }
 
+// Rest API
+#[get("/posts", format = "json")]
+fn rest_posts(conn: GuestbookDbConn) ->Json<Vec<Post>> {
+    let mut stmt = conn.prepare("SELECT * FROM post").unwrap();
+    let post_iter = stmt.query_map(
+        &[],
+        |row| {
+            Post {
+                id: row.get(0),
+                reply_id: row.get(1),
+                name: row.get(2),
+                title: row.get(3),
+                content: row.get(4),
+           }
+        }
+    ).unwrap();
+
+    Json(
+        post_iter.map(
+            |post| post.unwrap()
+        ).collect()
+    )
+}
+
+#[catch(404)]
+fn rest_not_found() -> JsonValue {
+    json!(
+        {
+            "status": "error",
+            "reason": "Resource not found."
+        }
+    )
+}
+
 fn main() {
     init_database();
 
     rocket::ignite()
         .mount("/", routes![index, topic_form, reply_form, create_topic])
+        .mount("/api", routes![rest_posts])
+        .register(catchers![rest_not_found])
         .attach(Template::fairing())
         .attach(GuestbookDbConn::fairing())
         .launch();
