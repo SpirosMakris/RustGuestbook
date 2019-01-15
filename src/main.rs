@@ -96,12 +96,47 @@ fn create_topic(conn: GuestbookDbConn, post: Form<Post>) -> Redirect {
 }
 
 fn main() {
+    init_database();
+
     rocket::ignite()
-        .mount("/", routes![index])
-        .mount("/", routes![topic_form])
-        .mount("/", routes![reply_form])
-        .mount("/", routes![create_topic])
+        .mount("/", routes![index, topic_form, reply_form, create_topic])
         .attach(Template::fairing())
         .attach(GuestbookDbConn::fairing())
         .launch();
+}
+
+fn init_database() {
+    let conn = rusqlite::Connection::open("db/guestbook.db3").unwrap();
+    conn.execute("DROP TABLE IF EXISTS post", &[]).unwrap();
+
+    conn.execute("CREATE TABLE post (id INTEGER PRIMARY KEY, reply_id, name, title, content, created_time)", &[]).unwrap();
+
+    add_dummy_data(&conn);
+}
+
+fn add_dummy_data(conn: &rusqlite::Connection) {
+    let post_1 = Post {
+        id: None,
+        reply_id: Some("reply_id_1".to_string()),
+        name: "post_1".to_string(),
+        title: "title_1".to_string(),
+        content: "content_1 -> lalalalalallal".to_string(),
+        //@TODO: Add created time
+    };
+
+
+    let post_2 = Post {
+        id: None,
+        reply_id: None,
+        name: "post_2".to_string(),
+        title: "title_2".to_string(),
+        content: "content_2 -> More of lalalalalallal".to_string(),
+        //@TODO: Add created time
+    };
+
+    conn.execute("INSERT INTO post(id, reply_id, name, title, content) VALUES (?1, ?2, ?3, ?4, ?5)",
+        &[&post_1.id, &post_1.reply_id, &post_1.name, &post_1.title, &post_1.content]).unwrap();
+    
+    conn.execute("INSERT INTO post(reply_id, name, title, content) VALUES (?1, ?2, ?3, ?4)",
+        &[&post_2.reply_id, &post_2.name, &post_2.title, &post_2.content]).unwrap();
 }
